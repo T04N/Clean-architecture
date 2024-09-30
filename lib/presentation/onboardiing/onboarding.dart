@@ -180,9 +180,19 @@ class OnBoardingPage extends StatelessWidget {
             style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p8),
+          child: Text(
+            sliderObject.title,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+        ),
         const SizedBox(
           height: AppSize.s40,
         ),
+        SvgPicture.asset(sliderObject.image),
+
       ],
     );
   }
