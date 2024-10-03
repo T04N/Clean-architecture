@@ -35,6 +35,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.10+1
+  retrofit: ^4.4.1
+  dio: ^5.7.0
+  json_serializable: ^6.8.0
+  retrofit_generator: ^8.2.1
+  analyzer: ^6.4.1
+  json_annotation: ^4.9.0
+  dartz: ^0.10.1
+  internet_connection_checker_plus: 2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +54,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+  build_runner: ^2.4.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -99,6 +108,7 @@ flutter:
     - assets/images/contact_us_ic.svg
     - assets/images/invite_friends_ic.svg
     - assets/images/logout_ic.svg
+    - lib/presentation/onboardiing/
 #    - assets/json/loading.json
 #    - assets/json/error.json
 #    - assets/json/empty.json

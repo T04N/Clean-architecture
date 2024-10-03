@@ -2,62 +2,62 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nvvm/presentation/domain/model.dart';
+import 'package:nvvm/presentation/onboardiing/onBoarding_viewmodel.dart';
 import 'package:nvvm/presentation/resource/asset_manager.dart';
 import 'package:nvvm/presentation/resource/color_manager.dart';
 import 'package:nvvm/presentation/resource/strings_manager.dart';
 import 'package:nvvm/presentation/resource/value_manager.dart';
 
-class SliderObject {
-  SliderObject(this.title, this.subTitle, this.image);
-  String title;
-  String subTitle;
-  String image;
-}
+
+
 
 class onboardingView extends StatefulWidget {
   const onboardingView({super.key});
 
   @override
-  State<onboardingView> createState() => _onnboardingViewState();
+  State<onboardingView> createState() => _onboardingViewState();
 }
 
-class _onnboardingViewState extends State<onboardingView> {
+class _onboardingViewState extends State<onboardingView> {
   final PageController _pageController = PageController(initialPage: 0);
-  int _currentIndex = 0;
-  late final List<SliderObject> _list = _getSliderData();
+final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
 
-  List<SliderObject> _getSliderData() {
-    return [
-      SliderObject(AppStrings.onBoardingTitle1, AppStrings.onBoardingSubtitle1,
-          ImageAssets.onboardingLogo1),
-      SliderObject(AppStrings.onBoardingTitle2, AppStrings.onBoardingSubtitle2,
-          ImageAssets.onboardingLogo2),
-      SliderObject(AppStrings.onBoardingTitle3, AppStrings.onBoardingSubtitle3,
-          ImageAssets.onboardingLogo3),
-      SliderObject(AppStrings.onBoardingTitle4, AppStrings.onBoardingSubtitle3,
-          ImageAssets.onboardingLogo4),
-    ];
-  }
-  int _getPreviousIndex() {
-    if (_currentIndex == 0) return _currentIndex;
-    return --_currentIndex;  // Pre-decrement to correctly reduce the index
+  _bind() {
+    _viewmodel.start();
   }
 
-  int _getNextIndex() {
-    if (_currentIndex == _list.length - 1) return _currentIndex;
-    return ++_currentIndex;  // Pre-increment to correctly advance the index
+
+  @override
+  void initState() {
+    _bind();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _viewmodel.dispose();
+    super.dispose();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    return StreamBuilder<SlideViewObject>(
+        stream: _viewmodel.outputSliderViewObject,
+        builder: (context, snapshot) {
+          return _getContentWidget(snapshot.data);
+        });
+  }
 
-
-
+  Widget _getContentWidget(SlideViewObject? sliderViewObject) {
+    if (sliderViewObject == null) {
+      return Center(child: CircularProgressIndicator());
+    }
     return Scaffold(
       appBar: AppBar(
         elevation: AppSize.s1_5,
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.white,
           statusBarBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark,
@@ -65,14 +65,13 @@ class _onnboardingViewState extends State<onboardingView> {
       ),
       body: PageView.builder(
         controller: _pageController,
-        itemCount: _list.length,
-        onPageChanged: (int page) {
-          setState(() {
-            _currentIndex = page;
-          });
+        itemCount: sliderViewObject.numOfSliders,
+        onPageChanged: (int indexPage) {
+          _viewmodel.onPageChanged(indexPage);
         },
-        itemBuilder: (BuildContext context, int index) {
-          return OnBoardingPage(sliderObject: _list[index]);
+        itemBuilder: ( context,  index) {
+          return OnBoardingPage(sliderObject: sliderViewObject!.sliderObject);
+
         },
       ),
       bottomSheet: Container(
@@ -94,69 +93,71 @@ class _onnboardingViewState extends State<onboardingView> {
               ),
             ),
             // Add Bottom Sheet widget here
-            _getBottomSheetWidget(),
+           Expanded(child:  _getBottomSheetWidget(sliderViewObject)),
           ],
         ),
       ),
     );
   }
 
-  Widget _getBottomSheetWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: EdgeInsets.all(AppPadding.p14),
-          child: GestureDetector(
-            child: SizedBox(
-              height: AppSize.s20,
-              width: AppSize.s20,
-              child: SvgPicture.asset(ImageAssets.leftArrowIc),
+  Widget _getBottomSheetWidget(SlideViewObject? sliderViewObject) {
+    return Container(
+      color: ColorManager.primary,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: EdgeInsets.all(AppPadding.p14),
+            child: GestureDetector(
+              child: SizedBox(
+                height: AppSize.s20,
+                width: AppSize.s20,
+                child: SvgPicture.asset(ImageAssets.leftArrowIc),
+              ),
+              onTap: () {
+                _viewmodel.goPrevious() ;
+              },
             ),
-            onTap: () {
-              _pageController.animateToPage(_getPreviousIndex(), duration:Duration(microseconds: DurationConstant.d300) , curve: Curves.bounceInOut);
-            },
+
           ),
 
-        ),
-
-        Row(
-          children: List.generate(_list.length, (int i) {
-            return Padding(
-              padding: EdgeInsets.all(AppPadding.p8),
-              child: _getProperCicrle(i),
-            );
-          }),
-        )
-        ,
+          Row(
+            children: List.generate(sliderViewObject!.numOfSliders, (int i) {
+              return Padding(
+                padding: EdgeInsets.all(AppPadding.p8),
+                child: _getProperCicrle(i, sliderViewObject.currentIndex),
+              );
+            }),
+          )
+          ,
 
 
-        Padding(
-          padding: EdgeInsets.all(AppPadding.p14),
-          child: GestureDetector(
-            child: SizedBox(
-              height: AppSize.s20,
-              width: AppSize.s20,
-              child: SvgPicture.asset(ImageAssets.rightarrowIc),
+          Padding(
+            padding: EdgeInsets.all(AppPadding.p14),
+            child: GestureDetector(
+              child: SizedBox(
+                height: AppSize.s20,
+                width: AppSize.s20,
+                child: SvgPicture.asset(ImageAssets.rightarrowIc),
+              ),
+              onTap: () {
+               _viewmodel.goNext();
+              },
             ),
-            onTap: () {
-              _pageController.animateToPage(_getNextIndex(), duration:Duration(microseconds: DurationConstant.d300) , curve: Curves.bounceInOut);
-            },
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
 
-
-  Widget _getProperCicrle(int indexPage ) {
-    if ( _currentIndex ==indexPage ) {
+  Widget _getProperCicrle(int indexPage, int _currentIndex) {
+    if (_currentIndex == indexPage) {
       return SvgPicture.asset(ImageAssets.hollowCircleIc);
-    } else return SvgPicture.asset(ImageAssets.solidCircleIc);
+    } else
+      return SvgPicture.asset(ImageAssets.solidCircleIc);
   }
 }
-
 
 
 class OnBoardingPage extends StatelessWidget {
@@ -177,7 +178,10 @@ class OnBoardingPage extends StatelessWidget {
           child: Text(
             sliderObject.title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineLarge,
+            style: Theme
+                .of(context)
+                .textTheme
+                .headlineLarge,
           ),
         ),
         Padding(
@@ -185,7 +189,10 @@ class OnBoardingPage extends StatelessWidget {
           child: Text(
             sliderObject.title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
+            style: Theme
+                .of(context)
+                .textTheme
+                .headlineMedium,
           ),
         ),
         const SizedBox(

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:nvvm/data/network/network_info.dart';
 import 'package:nvvm/presentation/resource/route_manager.dart';
 import 'package:nvvm/presentation/resource/theme_manager.dart';
 
@@ -35,6 +37,9 @@ class _MyAppState extends State<MyApp> {
     // Sử dụng singleton logic từ AppLogic
     AppLogic().doSomething();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
