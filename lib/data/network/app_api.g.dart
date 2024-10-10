@@ -37,7 +37,7 @@ class _AppServiceClient implements AppServiceClient {
       'email': email,
       'password': password,
       'imei': imei,
-      'deviceType': deviceType,
+      'device_type': deviceType,
     };
     final _options = _setStreamType<AuthenticationsResponse>(Options(
       method: 'POST',
@@ -46,7 +46,7 @@ class _AppServiceClient implements AppServiceClient {
     )
         .compose(
           _dio.options,
-          '/customer/login',
+          '/customers/login',
           queryParameters: queryParameters,
           data: _data,
         )

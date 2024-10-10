@@ -13,12 +13,12 @@ abstract class AppServiceClient {
   factory AppServiceClient(Dio dio,
       {String? baseUrl, ParseErrorLogger? errorLogger}) = _AppServiceClient;
 
-  @POST("/customer/login")
+  @POST("/customers/login")
   Future<AuthenticationsResponse> login(
       @Field("email") String email,
       @Field("password") String password,
       @Field("imei") String imei,
-      @Field("deviceType") String deviceType,
+      @Field("device_type") String deviceType,
       );
 
 

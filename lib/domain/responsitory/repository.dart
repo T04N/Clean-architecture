@@ -1,7 +1,8 @@
 import 'package:nvvm/data/request/request.dart';
 import 'package:nvvm/data/responses/responses.dart';
-import 'package:nvvm/presentation/domain/model.dart';
 import 'package:dartz/dartz.dart';
+
+import '../../domain/model/model.dart';
 
 
 abstract class Repository {

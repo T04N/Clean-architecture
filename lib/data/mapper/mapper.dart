@@ -1,6 +1,7 @@
 import 'package:nvvm/app/extension.dart';
 import 'package:nvvm/data/responses/responses.dart';
-import 'package:nvvm/presentation/domain/model.dart';
+
+import '../../domain/model/model.dart';
 
 extension CustomerResponseMapper on CustomerResponse {
   Customer toCustomerDomain() {

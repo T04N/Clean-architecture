@@ -1,3 +1,4 @@
+import 'package:nvvm/data/network/error_handler.dart';
 import 'package:nvvm/presentation/onboardiing/onboarding.dart';
 
 class SlideViewObject {
@@ -43,6 +44,18 @@ class Customer {
 class Failure {
   int code;
   String message;
-
   Failure(this.code, this.message);
+}
+
+class DefaultFailure extends Failure {
+  DefaultFailure() : super(ResponseCode.DEFAULT, ResponseMessage.DEFAULT);
+}
+
+
+
+class DeviceInfo {
+  DeviceInfo(this.nameDevice, this.indentifier, this.version);
+  String nameDevice;
+  String indentifier;
+  String version;
 }

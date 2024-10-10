@@ -4,10 +4,14 @@ class Assets {
 
   static const String appApp = 'lib/app/app.dart';
   static const String appConstant = 'lib/app/constant.dart';
+  static const String appDependencyInject = 'lib/app/dependency_inject.dart';
   static const String appExtension = 'lib/app/extension.dart';
+  static const String appFunctions = 'lib/app/functions.dart';
   static const String baseBaseviewmodel = 'lib/presentation/base/baseviewmodel.dart';
+  static const String commonFreezedDataClass = 'lib/presentation/common/freezed_data_class.dart';
+  static const String commonFreezedDataClass.freezed = 'lib/presentation/common/freezed_data_class.freezed.dart';
+  static const String commonFreezedDataClass.g = 'lib/presentation/common/freezed_data_class.g.dart';
   static const String dataSourceRemoteDataSource = 'lib/data/data_source/remote_data_source.dart';
-  static const String domainModel = 'lib/presentation/domain/model.dart';
   static const String forgotPasswordForgotpass = 'lib/presentation/forgot_password/forgotpass.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
   static const String imagesChangeLangIc = 'assets/images/change_lang_ic.svg';
@@ -25,13 +29,21 @@ class Assets {
   static const String imagesSettingsRightArrowIc = 'assets/images/settings_right_arrow_ic.svg';
   static const String imagesSolidCircleIc = 'assets/images/solid_circle_ic.svg';
   static const String imagesSplashLogo = 'assets/images/splash_logo.png';
+  static const String jsonEmpty = 'assets/json/empty.json';
+  static const String jsonError = 'assets/json/error.json';
+  static const String jsonLoading = 'assets/json/loading.json';
+  static const String jsonSuccess = 'assets/json/success.json';
   static const String libMain = 'lib/main.dart';
   static const String libTest = 'lib/test.dart';
   static const String loginLogin = 'lib/presentation/login/login.dart';
+  static const String loginLoginViewmodel = 'lib/presentation/login/login_viewmodel.dart';
   static const String mainMainRoute = 'lib/presentation/main/mainRoute.dart';
   static const String mapperMapper = 'lib/data/mapper/mapper.dart';
+  static const String modelModel = 'lib/domain/model/model.dart';
   static const String networkAppApi = 'lib/data/network/app_api.dart';
   static const String networkAppApi.g = 'lib/data/network/app_api.g.dart';
+  static const String networkDioFactory = 'lib/data/network/dio_factory.dart';
+  static const String networkErrorHandler = 'lib/data/network/error_handler.dart';
   static const String networkNetworkInfo = 'lib/data/network/network_info.dart';
   static const String onboardiingOnBoardingViewmodel = 'lib/presentation/onboardiing/onBoarding_viewmodel.dart';
   static const String onboardiingOnboarding = 'lib/presentation/onboardiing/onboarding.dart';
@@ -46,9 +58,13 @@ class Assets {
   static const String resourceValueManager = 'lib/presentation/resource/value_manager.dart';
   static const String responsesResponses = 'lib/data/responses/responses.dart';
   static const String responsesResponses.g = 'lib/data/responses/responses.g.dart';
-  static const String responsitoryRepository = 'lib/data/responsitory/repository.dart';
-  static const String responsitoryRepositoryIml = 'lib/data/responsitory/repository_iml.dart';
+  static const String responsitoryRepository = 'lib/domain/responsitory/repository.dart';
+  static const String responsitoryRepositoryIml = 'lib/domain/responsitory/repository_iml.dart';
   static const String splashSplash = 'lib/presentation/splash/splash.dart';
+  static const String stateRenderStateRenderer = 'lib/presentation/common/state_render/state_renderer.dart';
+  static const String stateRenderStateRendererImp = 'lib/presentation/common/state_render/state_renderer_imp.dart';
   static const String storeDetailsStoreDetail = 'lib/presentation/storeDetails/storeDetail.dart';
+  static const String usecaseBaseUsecase = 'lib/domain/usecase/base_usecase.dart';
+  static const String usecaseLoginUsecase = 'lib/domain/usecase/login_usecase.dart';
 
 }

@@ -1,10 +1,11 @@
 import 'dart:async';
 
 import 'package:nvvm/presentation/base/baseviewmodel.dart';
-import 'package:nvvm/presentation/domain/model.dart';
 import 'package:nvvm/presentation/onboardiing/onboarding.dart';
 import 'package:nvvm/presentation/resource/asset_manager.dart';
 import 'package:nvvm/presentation/resource/strings_manager.dart';
+
+import '../../domain/model/model.dart';
 
 class OnboardingViewmodel extends BaseViewmodel
     implements OnBoardingViewmodelInputs, OnBoardingViewmodelOutputs {
@@ -74,6 +75,7 @@ class OnboardingViewmodel extends BaseViewmodel
   @override
   Stream<SlideViewObject> get outputSliderViewObject =>
       _streamController.stream.map((SlideViewObject) => SlideViewObject);
+
 
 
   _postDataToView() {

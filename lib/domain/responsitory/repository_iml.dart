@@ -1,10 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:nvvm/data/data_source/remote_data_source.dart';
 import 'package:nvvm/data/mapper/mapper.dart';
+import 'package:nvvm/data/network/error_handler.dart';
 import 'package:nvvm/data/network/network_info.dart';
 import 'package:nvvm/data/request/request.dart';
-import 'package:nvvm/data/responsitory/repository.dart';
-import 'package:nvvm/presentation/domain/model.dart';
+import 'package:nvvm/domain/responsitory/repository.dart';
+
+import '../../domain/model/model.dart';
 
 class RepositoryIml extends Repository {
   RepositoryIml(this._remoteDataSource, this._networkInfo);
@@ -19,7 +21,7 @@ class RepositoryIml extends Repository {
     if (await _networkInfo.isConnected) {
       final response = await _remoteDataSource.login(loginRequest);
 
-      if (response.baseResponseStatus == 0) {
+      if (response.baseResponseStatus == ApiInternalStatus.SUCCESS) {
         //  return data (Success )
         return Right(response.toAuthenticationDomain());
       }

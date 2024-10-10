@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:nvvm/presentation/domain/model.dart';
 import 'package:nvvm/presentation/onboardiing/onBoarding_viewmodel.dart';
 import 'package:nvvm/presentation/resource/asset_manager.dart';
 import 'package:nvvm/presentation/resource/color_manager.dart';
 import 'package:nvvm/presentation/resource/strings_manager.dart';
 import 'package:nvvm/presentation/resource/value_manager.dart';
+
+import '../../domain/model/model.dart';
+import '../login/login.dart';
 
 
 
@@ -52,7 +54,7 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
 
   Widget _getContentWidget(SlideViewObject? sliderViewObject) {
     if (sliderViewObject == null) {
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     }
     return Scaffold(
       appBar: AppBar(
@@ -84,7 +86,9 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                  // Add action for skipping onboarding
+                 Navigator.push(context, MaterialPageRoute(builder: (builder) {
+                   return LoginView();
+                 }));
                 },
                 child: const Text(
                   AppStrings.skip,
