@@ -3,6 +3,9 @@ import 'package:nvvm/data/responses/responses.dart';
 
 import '../../domain/model/model.dart';
 
+
+//
+
 extension CustomerResponseMapper on CustomerResponse {
   Customer toCustomerDomain() {
     return Customer(this?.id?.orEmpty() ?? EMPTY, this.name?.orEmpty() ?? EMPTY,
@@ -23,3 +26,9 @@ extension AuthenticationResponseMapper on AuthenticationsResponse {
         this?.contacts?.toContactDomain());
   }
 }
+
+
+extension ForgotPasswordResponseMapper on ForgotPasswordResponse  {
+  Support toSupportDomain() {
+    return Support(this?.support);
+  }}

@@ -20,9 +20,14 @@ class SliderObject {
 
 class Authentication {
   Authentication(this.customer, this.contacts);
-
   Customer? customer;
   Contacts? contacts;
+}
+
+
+class Support {
+  Support(this.support);
+  String? support;
 }
 
 class Contacts {

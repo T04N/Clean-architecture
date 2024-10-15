@@ -37,6 +37,7 @@ extension FlowStateExtension on FlowState {
           return StateRenderer(
             stateRendererType: getStateRendererType(),
             message: getMessage(),
+
             retryActionFunc: retryActionFunction,
           );
 
@@ -95,6 +96,22 @@ class EmptyState extends FlowState {
       StateRendererType.EMPTY_SCREEN_STATE;
 }
 
+
+class SuccessState extends FlowState {
+  StateRendererType stateRendererType;
+  String message;
+
+  SuccessState({required this.stateRendererType, String? message})
+      : message = message ?? AppStrings.loading;
+
+  @override
+  String getMessage() => message;
+
+  @override
+  StateRendererType getStateRendererType() => stateRendererType;
+  }
+
+
 class ErrorState extends FlowState {
   StateRendererType stateRendererType;
   String message;
@@ -128,6 +145,8 @@ showPopUp(
       builder: (BuildContext context) => StateRenderer(
             stateRendererType: stateRenderType,
             message: message,
-            retryActionFunc: () {},
+            retryActionFunc: () {
+
+            },
           )));
 }

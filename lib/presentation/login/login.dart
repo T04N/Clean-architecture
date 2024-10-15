@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nvvm/app/app_prefs.dart';
 import 'package:nvvm/app/dependency_inject.dart';
 import 'package:nvvm/presentation/resource/asset_manager.dart';
 import 'package:nvvm/presentation/resource/strings_manager.dart';
 import 'package:nvvm/presentation/resource/value_manager.dart';
 
+import '../common/state_render/state_renderer_imp.dart';
 import '../resource/route_manager.dart';
 import 'login_viewmodel.dart';
 
@@ -17,6 +20,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  AppPreferences _appPreferences = getIt<AppPreferences>();
   LoginViewModel _viewModel = getIt<LoginViewModel>();
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -24,10 +28,28 @@ class _LoginViewState extends State<LoginView> {
 
   _bind() {
     _viewModel.start();
+    _viewModel.isUserLoginSuccess.stream.listen((isLoggedSuccess) {
+        print("isLoggedSuccess: $isLoggedSuccess"); // Thêm log tại đây để debug
+      SchedulerBinding.instance?.addPostFrameCallback((_)  {
+        _appPreferences.setIsUserLoggedIn();
+      Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
+      });
+
+    });
+
     _usernameController
         .addListener(() => _viewModel.setUsername(_usernameController.text));
     _passwordController
         .addListener(() => _viewModel.setPassword(_passwordController.text));
+  }
+
+  @override
+  void dispose() {
+    _viewModel.isUserLoginSuccess.close(); // Đóng stream khi không cần dùng nữa
+    _usernameController.dispose(); // Đảm bảo đóng controller cho input
+    _passwordController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -143,6 +165,17 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return _getContentWidget();
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: StreamBuilder(
+          stream: _viewModel.outputState,
+          builder: (context, snapshot) {
+            return snapshot.data?.getScreenWidget(context, _getContentWidget(),
+                    () {
+                  _viewModel.login();
+                }) ??
+                _getContentWidget();
+          }),
+    );
   }
 }

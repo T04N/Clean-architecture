@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:nvvm/domain/usecase/login_usecase.dart';
 import 'package:nvvm/presentation/base/baseviewmodel.dart';
+import 'package:nvvm/presentation/common/state_render/state_renderer.dart';
 import 'package:nvvm/presentation/common/state_render/state_renderer_imp.dart';
 
 import '../common/freezed_data_class.dart';
@@ -9,7 +10,7 @@ class LoginViewModel extends BaseViewmodel
     implements LoginViewModelInput, LoginViewModelOutput {
   LoginViewModel(this._loginUsecase);
 
-  LoginUsecase ? _loginUsecase;
+  LoginUseCase _loginUsecase;
 
   StreamController<String> _inputUsernameController =
       StreamController<String>.broadcast();
@@ -17,12 +18,15 @@ class LoginViewModel extends BaseViewmodel
       StreamController<String>.broadcast();
 
   StreamController _inputAllValidController =
-  StreamController<void>.broadcast();
+      StreamController<void>.broadcast();
+
+  StreamController isUserLoginSuccess = StreamController<bool>();
 
   var loginObject = LoginObject(username: '', password: '');
 
   @override
   void start() {
+    //view  tell state render, plz show content of the screen
     inputState.add(ContentState());
   }
 
@@ -31,9 +35,8 @@ class LoginViewModel extends BaseViewmodel
     _inputUsernameController.close();
     _inputPasswordController.close();
     _inputAllValidController.close();
+    isUserLoginSuccess.close();
   }
-
-
 
   @override
   Sink get inputPassword => _inputPasswordController.sink;
@@ -47,15 +50,23 @@ class LoginViewModel extends BaseViewmodel
 
 
   @override
-  void login() async {
-    var currentLogin =
-        LoginUsecaseInput(loginObject.username, loginObject.password);
-
-    final result = await _loginUsecase?.execute(currentLogin);
-    result?.fold((failure) {
-      print(failure.message);
-    }, (data) {
-      print("login Success $data" );
+  login() async {
+    inputState.add(
+        LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
+    (await _loginUsecase.execute(
+            LoginUseCaseInput(loginObject.username, loginObject.password)))
+        .fold(
+            (failure) => {
+                  // left -> failure
+                  inputState.add(ErrorState(
+                      stateRendererType: StateRendererType.POPUP_ERROR_STATE,
+                      message: failure.message))
+                }, (data) {
+      // right -> success (data)
+      inputState.add(ContentState());
+      isUserLoginSuccess.add(true); //NAVIGATOR TO MAIN SCREEN
+      print(
+          "Login success, navigating to main screen"); // Thêm log tại đây để kiểm tra
     });
   }
 
@@ -74,7 +85,8 @@ class LoginViewModel extends BaseViewmodel
   }
 
   @override
-  Stream<bool> get outputAllValid => _inputAllValidController.stream.map((valid)=>_isValidAll() );
+  Stream<bool> get outputAllValid =>
+      _inputAllValidController.stream.map((valid) => _isValidAll());
 
   void setPassword(String password) {
     _inputPasswordController.sink.add(password);
@@ -97,14 +109,14 @@ class LoginViewModel extends BaseViewmodel
   }
 
   bool _isValidAll() {
-    return _isValidUsername(loginObject.username)
-        &&  _isValidPassword(loginObject.password);
+    return _isValidUsername(loginObject.username) &&
+        _isValidPassword(loginObject.password);
   }
-
-
 }
 
-abstract class LoginViewModelOutput {
+abstract class LoginViewModelInput {
+  // was changed
+
   void setUsername(String username);
 
   void setPassword(String password);
@@ -118,7 +130,7 @@ abstract class LoginViewModelOutput {
   Sink get inputAll;
 }
 
-abstract class LoginViewModelInput {
+abstract class LoginViewModelOutput {
   Stream<bool> get outputUsernameValid;
 
   Stream<bool> get outputPasswordValid;

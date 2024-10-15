@@ -14,6 +14,8 @@ enum StateRendererType {
   // POPUPS STATES
   POPUP_LOADING_STATE,
   POPUP_ERROR_STATE,
+  POPUP_SUCCESS_STATE,
+
 
   // FULL SCREEN STATES
   FULL_SCREEN_LOADING_STATE,
@@ -24,26 +26,24 @@ enum StateRendererType {
 
 class StateRenderer extends StatelessWidget {
   final StateRendererType stateRendererType;
-  final Failure? failure;
   final String message;
   final String title;
   final Function? retryActionFunc;
 
-  const StateRenderer({
-    Key? key,
-    required this.stateRendererType,
-    this.failure,
-    String? message,
-    String? title,
-    this.retryActionFunc,
-  })  : message = message ?? AppStrings.loading,
+
+  StateRenderer(
+      {Key? key,
+        required this.stateRendererType,
+        String? message,
+        String? title,
+        required this.retryActionFunc})
+      : message = message ?? AppStrings.loading,
         title = title ?? EMPTY,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Nếu failure là null, khởi tạo DefaultFailure tại đây
-    final effectiveFailure = failure ?? DefaultFailure();
     return _getStateWidget(context); // Thay thế bằng UI thực tế
   }
 
@@ -52,27 +52,27 @@ class StateRenderer extends StatelessWidget {
       case StateRendererType.POPUP_LOADING_STATE:
         return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.loading)]);
       case StateRendererType.POPUP_ERROR_STATE:
-        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.error), _getMessage(message)]);
+        return _getPopupDialog(context,[_getAnimatedImage(JsonAssets.error), _getMessage(message),_retryButton(context, AppStrings.retry_again)]);
       case StateRendererType.FULL_SCREEN_LOADING_STATE:
         return _getItemColumnn(
-            [_getAnimatedImage(JsonAssets.loading), _getMessage(failure!.message)]);
+            [_getAnimatedImage(JsonAssets.loading), _getMessage(message)]);
       case StateRendererType.FULL_SCREEN_ERROR_STATE:
         return _getItemColumnn([
           _getAnimatedImage(JsonAssets.error),
-          _getMessage(failure!.message),
+          _getMessage(message),
           _retryButton(context, AppStrings.retry_again)
         ]);
       case StateRendererType.CONTENT_SCREEN_STATE:
         return Container();
       case StateRendererType.EMPTY_SCREEN_STATE:
         return _getItemColumnn(
-            [_getAnimatedImage(JsonAssets.empty), _getMessage(failure!.message)]);
+            [_getAnimatedImage(JsonAssets.empty), _getMessage(message)]);
       default:
         return Container(); // Trường hợp không khớp sẽ trả về một widget rỗng
     }
   }
 
-
+// DESGIN AND SETTING POPUP dialog
   Widget _getPopupDialog(BuildContext context,  List<Widget> childrenWidget ) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -105,7 +105,6 @@ class StateRenderer extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
     children: childrenWidget,
     );
-
  }
   Widget _getAnimatedImage(String jsonImage) {
     return SizedBox(
@@ -122,7 +121,7 @@ class StateRenderer extends StatelessWidget {
     ); // jsonimgae)
   }
 
-  Widget _retryButton(BuildContext context,String buttonTitle) {
+  Widget _retryButton(BuildContext dialogContext,String buttonTitle) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppPadding.p18),
@@ -133,7 +132,7 @@ class StateRenderer extends StatelessWidget {
                 if (stateRendererType == StateRendererType.FULL_SCREEN_ERROR_STATE) {
                   retryActionFunc?.call();
                 } else {
-                  Navigator.of(context).pop();
+                  Navigator.of(dialogContext).pop();
                 }
               },
               child: Text(buttonTitle)),

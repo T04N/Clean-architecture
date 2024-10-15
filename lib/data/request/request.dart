@@ -8,3 +8,8 @@ class LoginRequest {
   String imei;
   String deviceType;
 }
+
+class ForgotPassRequest {
+  ForgotPassRequest(this.emailForgot);
+  String emailForgot;
+}

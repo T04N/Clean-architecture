@@ -14,7 +14,6 @@ class RepositoryIml extends Repository {
   NetworkInfo _networkInfo;
   RemoteDataSource _remoteDataSource;
 
-
   @override
   Future<Either<Failure, Authentication>> login(
       LoginRequest loginRequest) async {
@@ -24,15 +23,36 @@ class RepositoryIml extends Repository {
       if (response.baseResponseStatus == ApiInternalStatus.SUCCESS) {
         //  return data (Success )
         return Right(response.toAuthenticationDomain());
-      }
-      else {
-        // return biz logiz error
-        //return left
+      } else {
+        // return biz logic error
         return Left(Failure(
-            409, response.message ?? "We have bit error logic from Api side"));
+            409, response.message ?? "We have bit error logic from API side"));
       }
     } else {
-      return Left(Failure(501, "Plz check your internet"));
-    }
+      return Left(Failure(501, "Please check your internet"));
     }
   }
+
+  @override
+  Future<Either<Failure, Support>> forgotPassword(
+      ForgotPassRequest forgotPassRequest) async {
+    if (await _networkInfo.isConnected) {
+      ForgotPassRequest MockMail =    ForgotPassRequest("tev@gmail.com");
+      final response = await _remoteDataSource.forgotPassword(MockMail);
+        print("RepositoryIml: Received response with status ${response.baseResponseStatus}");
+      if (response.baseResponseStatus == ApiInternalStatus.SUCCESS) {
+        return Right(response.toSupportDomain());
+      } else {
+        print("RepositoryIml: Forgot password failed with message: ${response.message}");
+        return Left(Failure(
+            409, response.message ?? "We have bit error logic from API side"));
+      }
+    } else {
+      return Left(Failure(501, "Please check your internet"));
+    }
+
+    // Trả về mặc định nếu có lỗi logic
+    return Left(Failure(500, "Unknown error occurred"));
+  }
+
+}

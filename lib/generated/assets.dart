@@ -9,8 +9,8 @@ class Assets {
   static const String appFunctions = 'lib/app/functions.dart';
   static const String baseBaseviewmodel = 'lib/presentation/base/baseviewmodel.dart';
   static const String commonFreezedDataClass = 'lib/presentation/common/freezed_data_class.dart';
-  static const String commonFreezedDataClass.freezed = 'lib/presentation/common/freezed_data_class.freezed.dart';
-  static const String commonFreezedDataClass.g = 'lib/presentation/common/freezed_data_class.g.dart';
+  static const String commonFreezedDataClassfreezed = 'lib/presentation/common/freezed_data_class.freezed.dart';
+  static const String commonFreezedDataClassg = 'lib/presentation/common/freezed_data_class.g.dart';
   static const String dataSourceRemoteDataSource = 'lib/data/data_source/remote_data_source.dart';
   static const String forgotPasswordForgotpass = 'lib/presentation/forgot_password/forgotpass.dart';
   static const String generatedAssets = 'lib/generated/assets.dart';
@@ -41,7 +41,7 @@ class Assets {
   static const String mapperMapper = 'lib/data/mapper/mapper.dart';
   static const String modelModel = 'lib/domain/model/model.dart';
   static const String networkAppApi = 'lib/data/network/app_api.dart';
-  static const String networkAppApi.g = 'lib/data/network/app_api.g.dart';
+  static const String networkAppApig = 'lib/data/network/app_api.g.dart';
   static const String networkDioFactory = 'lib/data/network/dio_factory.dart';
   static const String networkErrorHandler = 'lib/data/network/error_handler.dart';
   static const String networkNetworkInfo = 'lib/data/network/network_info.dart';
@@ -57,7 +57,7 @@ class Assets {
   static const String resourceThemeManager = 'lib/presentation/resource/theme_manager.dart';
   static const String resourceValueManager = 'lib/presentation/resource/value_manager.dart';
   static const String responsesResponses = 'lib/data/responses/responses.dart';
-  static const String responsesResponses.g = 'lib/data/responses/responses.g.dart';
+  static const String responsesResponsesg = 'lib/data/responses/responses.g.dart';
   static const String responsitoryRepository = 'lib/domain/responsitory/repository.dart';
   static const String responsitoryRepositoryIml = 'lib/domain/responsitory/repository_iml.dart';
   static const String splashSplash = 'lib/presentation/splash/splash.dart';

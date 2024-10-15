@@ -126,8 +126,8 @@ extension DataSourceExtension on DataSource {
 }
 
 class ApiInternalStatus {
-   static const int SUCCESS = 1 ;
-   static const int FAILURE =  0 ;
+   static const int SUCCESS = 0 ;
+   static const int FAILURE =  1 ;
 }
 
 

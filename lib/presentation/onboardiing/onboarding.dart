@@ -2,17 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:nvvm/app/app_prefs.dart';
 import 'package:nvvm/presentation/onboardiing/onBoarding_viewmodel.dart';
 import 'package:nvvm/presentation/resource/asset_manager.dart';
 import 'package:nvvm/presentation/resource/color_manager.dart';
 import 'package:nvvm/presentation/resource/strings_manager.dart';
 import 'package:nvvm/presentation/resource/value_manager.dart';
 
+import '../../app/dependency_inject.dart';
 import '../../domain/model/model.dart';
 import '../login/login.dart';
-
-
-
 
 class onboardingView extends StatefulWidget {
   const onboardingView({super.key});
@@ -23,12 +22,13 @@ class onboardingView extends StatefulWidget {
 
 class _onboardingViewState extends State<onboardingView> {
   final PageController _pageController = PageController(initialPage: 0);
-final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
+  final OnboardingViewmodel _viewmodel = OnboardingViewmodel();
+  AppPreferences _appPreferences = getIt<AppPreferences>();
 
   _bind() {
     _viewmodel.start();
+    _appPreferences.setOnBoardingScreenViewed();
   }
-
 
   @override
   void initState() {
@@ -41,7 +41,6 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
     _viewmodel.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +70,8 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
         onPageChanged: (int indexPage) {
           _viewmodel.onPageChanged(indexPage);
         },
-        itemBuilder: ( context,  index) {
+        itemBuilder: (context, index) {
           return OnBoardingPage(sliderObject: sliderViewObject!.sliderObject);
-
         },
       ),
       bottomSheet: Container(
@@ -86,9 +84,9 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
               alignment: Alignment.centerRight,
               child: TextButton(
                 onPressed: () {
-                 Navigator.push(context, MaterialPageRoute(builder: (builder) {
-                   return LoginView();
-                 }));
+                  Navigator.push(context, MaterialPageRoute(builder: (builder) {
+                    return LoginView();
+                  }));
                 },
                 child: const Text(
                   AppStrings.skip,
@@ -97,7 +95,7 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
               ),
             ),
             // Add Bottom Sheet widget here
-           Expanded(child:  _getBottomSheetWidget(sliderViewObject)),
+            Expanded(child: _getBottomSheetWidget(sliderViewObject)),
           ],
         ),
       ),
@@ -119,12 +117,10 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
                 child: SvgPicture.asset(ImageAssets.leftArrowIc),
               ),
               onTap: () {
-                _viewmodel.goPrevious() ;
+                _viewmodel.goPrevious();
               },
             ),
-
           ),
-
           Row(
             children: List.generate(sliderViewObject!.numOfSliders, (int i) {
               return Padding(
@@ -132,10 +128,7 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
                 child: _getProperCicrle(i, sliderViewObject.currentIndex),
               );
             }),
-          )
-          ,
-
-
+          ),
           Padding(
             padding: EdgeInsets.all(AppPadding.p14),
             child: GestureDetector(
@@ -145,7 +138,7 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
                 child: SvgPicture.asset(ImageAssets.rightarrowIc),
               ),
               onTap: () {
-               _viewmodel.goNext();
+                _viewmodel.goNext();
               },
             ),
           )
@@ -154,7 +147,6 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
     );
   }
 
-
   Widget _getProperCicrle(int indexPage, int _currentIndex) {
     if (_currentIndex == indexPage) {
       return SvgPicture.asset(ImageAssets.hollowCircleIc);
@@ -162,7 +154,6 @@ final  OnboardingViewmodel _viewmodel = OnboardingViewmodel();
       return SvgPicture.asset(ImageAssets.solidCircleIc);
   }
 }
-
 
 class OnBoardingPage extends StatelessWidget {
   SliderObject sliderObject;
@@ -182,10 +173,7 @@ class OnBoardingPage extends StatelessWidget {
           child: Text(
             sliderObject.title,
             textAlign: TextAlign.center,
-            style: Theme
-                .of(context)
-                .textTheme
-                .headlineLarge,
+            style: Theme.of(context).textTheme.headlineLarge,
           ),
         ),
         Padding(
@@ -193,17 +181,13 @@ class OnBoardingPage extends StatelessWidget {
           child: Text(
             sliderObject.title,
             textAlign: TextAlign.center,
-            style: Theme
-                .of(context)
-                .textTheme
-                .headlineMedium,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
         ),
         const SizedBox(
           height: AppSize.s40,
         ),
         SvgPicture.asset(sliderObject.image),
-
       ],
     );
   }

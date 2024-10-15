@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../domain/model/model.dart';
 
-Future<DeviceInfo> getDeviceDeviceDetails() async {
+Future<DeviceInfo> getDeviceDetails() async {
   String nameDevice = "Unknown";
   String indentifier = "Unknown";
   String version = "Unknown";
