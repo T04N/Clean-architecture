@@ -5,7 +5,7 @@ import 'package:nvvm/data/responses/responses.dart';
 
 abstract class RemoteDataSource {
   Future<AuthenticationsResponse> login(LoginRequest loginRequest);
-  Future<ForgotPasswordResponse> forgotPassword(ForgotPassRequest forgotPassRequest);
+  Future<ForgotPasswordResponse> forgotPassword(String email);
 }
 
 class RemoteDataSourceImlements implements RemoteDataSource {
@@ -18,16 +18,21 @@ class RemoteDataSourceImlements implements RemoteDataSource {
     return await _appServiceClient.login(loginRequest.email,
         loginRequest.password, loginRequest.imei, loginRequest.deviceType);
   }
-  Future<ForgotPasswordResponse> forgotPassword(ForgotPassRequest request) async {
+  Future<ForgotPasswordResponse> forgotPassword(String email) async {
     try {
-      final response = await _appServiceClient.forgotPassword(request.emailForgot);
+      final response = await _appServiceClient.forgotPassword(email);
       return response;
     } catch (e) {
       if (e is DioError) {
         print("DioError occurred: ${e.response?.data}");
+        print("Status Code: ${e.response?.statusCode}");
+        print("Error Message: ${e.message}");
+      } else {
+        print("Error occurred: ${e.toString()}");
       }
-      throw e;  // Rethrow để xử lý ở lớp trên
+      throw e;
     }
+
   }
 
 }

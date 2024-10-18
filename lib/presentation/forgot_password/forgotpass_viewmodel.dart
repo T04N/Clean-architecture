@@ -59,13 +59,13 @@ class ForgotpassViewmodel extends BaseViewmodel
     inputState.add(
         LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
     (await _forgotPasswordUseCase.execute(emailForgot)).fold((failure) {
-      print(failure.message) ;
+      print("fail : ${failure.message}") ;
       inputState.add(
           ErrorState(message : failure.message, stateRendererType: StateRendererType.POPUP_ERROR_STATE));
     }, (supportMessage) {
       print("thanh cong ") ;
       inputState.add(
-          SuccessState(message : supportMessage.support, stateRendererType: StateRendererType.POPUP_SUCCESS_STATE));
+          SuccessState(message : supportMessage, stateRendererType: StateRendererType.POPUP_SUCCESS_STATE));
     });
   }
 }

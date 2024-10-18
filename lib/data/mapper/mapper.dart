@@ -28,7 +28,8 @@ extension AuthenticationResponseMapper on AuthenticationsResponse {
 }
 
 
-extension ForgotPasswordResponseMapper on ForgotPasswordResponse  {
-  Support toSupportDomain() {
-    return Support(this?.support);
-  }}
+extension ForgotPasswordResponseMapper on ForgotPasswordResponse? {
+  String toSupportDomain() {
+    return this?.support?.orEmpty() ?? EMPTY;
+  }
+}
