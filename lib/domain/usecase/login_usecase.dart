@@ -1,9 +1,11 @@
+
 import 'package:dartz/dartz.dart';
 
 import '../../app/functions.dart';
+import '../../data/network/failure.dart';
 import '../../data/request/request.dart';
 import '../model/model.dart';
-import '../responsitory/repository.dart';
+import '../repository/repository.dart';
 import 'base_usecase.dart';
 
 class LoginUseCase implements BaseUseCase<LoginUseCaseInput, Authentication> {
@@ -16,15 +18,13 @@ class LoginUseCase implements BaseUseCase<LoginUseCaseInput, Authentication> {
       LoginUseCaseInput input) async {
     DeviceInfo deviceInfo = await getDeviceDetails();
     return await _repository.login(LoginRequest(
-        input.username, input.password, "dummyImie", deviceInfo.nameDevice));
+        input.email, input.password, deviceInfo.identifier, deviceInfo.name));
   }
 }
 
 class LoginUseCaseInput {
-  String username;
+  String email;
   String password;
 
-  LoginUseCaseInput(this.username, this.password);
+  LoginUseCaseInput(this.email, this.password);
 }
-
-

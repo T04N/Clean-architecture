@@ -1,9 +1,8 @@
 import 'dart:io';
 
+import 'package:complete_advanced_flutter/domain/model/model.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
-
-import '../domain/model/model.dart';
 
 Future<DeviceInfo> getDeviceDetails() async {
   String nameDevice = "Unknown";
@@ -27,4 +26,8 @@ Future<DeviceInfo> getDeviceDetails() async {
     return DeviceInfo(nameDevice, indentifier, version);
   }
   return DeviceInfo(nameDevice, indentifier, version) ;
+}
+
+bool isEmailValid(String email) {
+  return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
 }

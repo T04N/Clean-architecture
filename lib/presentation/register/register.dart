@@ -1,15 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-class registerView extends StatefulWidget {
-  const registerView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
-  State<registerView> createState() => _registerViewState();
+  _RegisterViewState createState() => _RegisterViewState();
 }
 
-class _registerViewState extends State<registerView> {
+class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Container();
   }
 }

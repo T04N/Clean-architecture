@@ -11,12 +11,10 @@ class ImageAssets {
   static const String leftArrowIc = "$IMAGE_PATH/left_arrow_ic.svg";
   static const String rightarrowIc = "$IMAGE_PATH/right_arrow_ic.svg";
   static const String solidCircleIc = "$IMAGE_PATH/solid_circle_ic.svg";
-
 }
 
-class JsonAssets  {
+class JsonAssets {
   static const String loading = "$JSON_PATH/loading.json";
-  static const String empty = "$JSON_PATH/empty.json";
-  static const String success = "$JSON_PATH/error.json";
   static const String error = "$JSON_PATH/error.json";
+  static const String empty = "$JSON_PATH/empty.json";
 }

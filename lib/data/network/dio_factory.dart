@@ -1,6 +1,11 @@
+import 'package:complete_advanced_flutter/app/app_prefs.dart';
+import 'package:complete_advanced_flutter/app/constant.dart';
 import 'package:dio/dio.dart';
-import 'package:nvvm/app/constant.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../../app/app_prefs.dart';
+import '../../app/constant.dart';
 
 const String APPLICATION_JSON = "application/json";
 const String CONTENT_TYPE = "content-type";
@@ -9,32 +14,34 @@ const String AUTHORIZATION = "authorization";
 const String DEFAULT_LANGUAGE = "language";
 
 class DioFactory {
-  Future<Dio> getDio() async {
-    Dio dio = Dio(); // Không cần từ khóa 'new' trong Dart hiện đại
-    int _timeOut = 60 * 1000;  // Thời gian timeout (60 giây)
+  AppPreferences _appPreferences;
 
-    // Tạo headers
+  DioFactory(this._appPreferences);
+
+  Future<Dio> getDio() async {
+    Dio dio = Dio();
+    int _timeOut = 60 * 1000; // 1 min
+    String language = await _appPreferences.getAppLanguage();
     Map<String, String> headers = {
       CONTENT_TYPE: APPLICATION_JSON,
       ACCEPT: APPLICATION_JSON,
       AUTHORIZATION: Constant.token,
-      DEFAULT_LANGUAGE: "en"
+      DEFAULT_LANGUAGE: language
     };
 
-    // Thiết lập BaseOptions cho Dio
     dio.options = BaseOptions(
-      baseUrl: Constant.baseUrl,
-      connectTimeout: Duration(milliseconds:_timeOut ) ,   // Thời gian chờ kết nối
-      receiveTimeout: Duration(milliseconds:_timeOut ),   // Thời gian chờ nhận phản hồi
-      headers: headers,           // Headers truyền vào cho request
-    );
+        baseUrl: Constant.baseUrl,
+        connectTimeout: Duration(microseconds: _timeOut),
+        receiveTimeout: Duration(microseconds: _timeOut),
+        headers: headers);
 
-    dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,      // Log phần headers của request
-      requestBody: true,        // Log body của request (nếu có)
-      responseBody: true,       // Log body của response
-      responseHeader: false,    // Không cần log headers của response
-    ));
-    return dio;  // Trả về Dio đã được cấu hình
+    if (kReleaseMode) {
+      print("release mode no logs");
+    } else {
+      dio.interceptors.add(PrettyDioLogger(
+          requestHeader: true, requestBody: true, responseHeader: true));
+    }
+
+    return dio;
   }
 }

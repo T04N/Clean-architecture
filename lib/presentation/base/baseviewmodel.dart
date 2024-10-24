@@ -1,45 +1,36 @@
 import 'dart:async';
+import '../common/state_renderer/state_render_impl.dart';
 
-import 'package:nvvm/presentation/common/state_render/state_renderer_imp.dart';
-
-abstract class BaseViewmodelInputs {
-  void start();
-
-  void dispose();
-
-  Sink get inputState;
-}
-
-abstract class BaseViewmodelOutputs {
-  // Có thể thêm các phương thức tại đây
-  Stream<FlowState> get outputState;
-}
-
-// Lớp BaseViewmodel kế thừa từ BaseViewmodelInputs
-abstract class BaseViewmodel extends BaseViewmodelInputs
-    implements BaseViewmodelOutputs {
-  // Thực hiện các phương thức cần thiết ở đây
-
-  StreamController _inputStateStreamController =
-      StreamController<FlowState>.broadcast();
-
+class BaseViewModel implements BaseViewModelInputs, BaseViewModelOutputs {
+  StreamController<FlowState> _inputStateStreamController = StreamController<FlowState>.broadcast();
 
   @override
-  void start() {
+  Sink get inputState => _inputStateStreamController.sink;
 
-  }
+  @override
+  Stream<FlowState> get outputState => _inputStateStreamController.stream.map((flowState) => flowState);
 
   @override
   void dispose() {
     _inputStateStreamController.close();
   }
 
+  // This method will be implemented in child classes
   @override
-  Sink get inputState => _inputStateStreamController.sink;
+  void start() {
+    // Implementation for start can be provided by subclasses or here directly
+  }
 
-  @override
-  Stream<FlowState> get outputState => _inputStateStreamController.stream.map((flowState)=>flowState);
+// shared variables and functions that will be used through any view model.
+}
 
+abstract class BaseViewModelInputs {
+  void start(); // will be called during initialization of the view model
+  void dispose(); // will be called when the viewmodel is disposed.
 
+  Sink get inputState;
+}
 
+abstract class BaseViewModelOutputs {
+  Stream<FlowState> get outputState;
 }

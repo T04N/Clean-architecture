@@ -1,50 +1,25 @@
-import 'package:flutter/cupertino.dart';
+import 'package:complete_advanced_flutter/presentation/resources/routes_manager.dart';
+import 'package:complete_advanced_flutter/presentation/resources/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
-import 'package:nvvm/data/network/network_info.dart';
-import 'package:nvvm/presentation/resource/route_manager.dart';
-import 'package:nvvm/presentation/resource/theme_manager.dart';
-
-import '../presentation/splash/splash.dart';
-
-class AppLogic {
-  // Singleton pattern cho logic quản lý ứng dụng
-  static final AppLogic _instance = AppLogic._internal();
-
-  factory AppLogic() {
-    return _instance;
-  }
-
-  AppLogic._internal();
-
-  // Các phương thức quản lý trạng thái hoặc logic của ứng dụng
-  void doSomething() {
-    print("Performing some logic...");
-  }
-}
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  MyApp._internal(); // private named constructor
+  int appState = 0;
+  static final MyApp instance =
+      MyApp._internal(); // single instance -- singleton
+
+  factory MyApp() => instance; // factory for the class instance
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-    // Sử dụng singleton logic từ AppLogic
-    AppLogic().doSomething();
-  }
-
-
-
-
-  @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      onGenerateRoute:  RouteGenerator.getRoute ,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: RouteGenerator.getRoute,
       initialRoute: Routes.splashRoute,
       theme: getApplicationTheme(),
     );
